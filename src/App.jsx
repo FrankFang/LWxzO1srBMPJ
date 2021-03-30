@@ -1,15 +1,34 @@
 // 请从课程简介里下载本代码
 import React from 'react'
-import {appContext, store, connect} from './redux.jsx'
+import {Provider, createStore, connect} from './redux.jsx'
 import {connectToUser} from './connecters/connectToUser'
+
+const reducer = (state, {type, payload}) => {
+  if (type === 'updateUser') {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        ...payload
+      }
+    }
+  } else {
+    return state
+  }
+}
+const initState = {
+  user: {name: 'frank', age: 18},
+  group: {name: '前端组'}
+}
+const store = createStore(reducer, initState)
 
 export const App = () => {
   return (
-    <appContext.Provider value={store}>
+    <Provider store={store}>
       <大儿子/>
       <二儿子/>
       <幺儿子/>
-    </appContext.Provider>
+    </Provider>
   )
 }
 const 大儿子 = () => {
@@ -24,9 +43,10 @@ const 幺儿子 = connect(state => {
   return {group: state.group}
 })(({group}) => {
   console.log('幺儿子执行了 ' + Math.random())
-  return <section>幺儿子<div>Group: {group.name}</div></section>
+  return <section>幺儿子
+    <div>Group: {group.name}</div>
+  </section>
 })
-
 
 
 const User = connectToUser(({user}) => {
