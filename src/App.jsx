@@ -62,15 +62,17 @@ const ajax = () => {
   })
 }
 
-const fetchUser = (dispatch)=>{
-  ajax('/user').then(response => {
-    dispatch({type:'updateUser', payload:response.data})
-  })
+const fetchUserPromise = () => {
+  return ajax('/user').then(response => response.data)
+}
+const fetchUser = (dispatch) => {
+  return ajax('/user').then(response => dispatch({type: 'updateUser', payload: response.data}))
 }
 const UserModifier = connect(null, null)(({state, dispatch}) => {
   console.log('UserModifier执行了 ' + Math.random())
   const onClick = (e) => {
-    dispatch(fetchUser)
+    dispatch({type: 'updateUser', payload: fetchUserPromise()})
+    // dispatch(fetchUser)
   }
   return <div>
     <div>User: {state.user.name}</div>
