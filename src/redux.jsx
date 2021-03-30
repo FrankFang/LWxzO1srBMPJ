@@ -21,7 +21,17 @@ const store = {
     }
   }
 }
-const dispatch = store.dispatch
+let dispatch = store.dispatch
+
+const prevDispatch = dispatch
+
+dispatch = (action)=>{
+  if(action instanceof Function){
+    action(dispatch)
+  } else{
+    prevDispatch(action) // 对象 type payload
+  }
+}
 
 export const createStore = (_reducer, initState) => {
   state = initState
