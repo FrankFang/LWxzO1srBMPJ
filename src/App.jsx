@@ -1,6 +1,7 @@
 // 请从课程简介里下载本代码
 import React from 'react'
 import {appContext, store, connect} from './redux.jsx'
+import {connectToUser} from './connecters/connectToUser'
 
 export const App = () => {
   return (
@@ -25,25 +26,22 @@ const 幺儿子 = connect(state => {
   console.log('幺儿子执行了 ' + Math.random())
   return <section>幺儿子<div>Group: {group.name}</div></section>
 })
-const User = connect(state => {
-  return {user: state.user}
-})(({user}) => {
+
+
+
+const User = connectToUser(({user}) => {
   console.log('User执行了 ' + Math.random())
   return <div>User:{user.name}</div>
 })
 
-const UserModifier = connect(null, (dispatch)=>{
-  return {
-    updateUser: (attrs)=> dispatch({type: 'updateUser', payload: attrs})
-  }
-})(({updateUser, state, children}) => {
+const UserModifier = connectToUser(({updateUser, user, children}) => {
   console.log('UserModifier执行了 ' + Math.random())
   const onChange = (e) => {
     updateUser({name: e.target.value})
   }
   return <div>
     {children}
-    <input value={state.user.name}
+    <input value={user.name}
       onChange={onChange}/>
   </div>
 })
