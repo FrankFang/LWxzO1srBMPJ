@@ -32,10 +32,14 @@ const User = connect(state => {
   return <div>User:{user.name}</div>
 })
 
-const UserModifier = connect()(({dispatch, state, children}) => {
+const UserModifier = connect(null, (dispatch)=>{
+  return {
+    updateUser: (attrs)=> dispatch({type: 'updateUser', payload: attrs})
+  }
+})(({updateUser, state, children}) => {
   console.log('UserModifier执行了 ' + Math.random())
   const onChange = (e) => {
-    dispatch({type: 'updateUser', payload: {name: e.target.value}})
+    updateUser({name: e.target.value})
   }
   return <div>
     {children}
